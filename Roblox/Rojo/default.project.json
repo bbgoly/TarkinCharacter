@@ -1,0 +1,93 @@
+{
+	"name": "Character",
+	"tree": {
+		"$className": "DataModel",
+		"HttpService": {
+			"$className": "HttpService",
+			"$properties": {
+				"HttpEnabled": true
+			}
+		},
+		"Lighting": {
+			"$className": "Lighting",
+			"$properties": {
+				"Ambient": [
+					0.0,
+					0.0,
+					0.0
+				],
+				"Outlines": false,
+				"GlobalShadows": true,
+				"Technology": "Voxel",
+				"Brightness": 2.0
+			}
+		},
+		"ReplicatedStorage": {
+			"$className": "ReplicatedStorage",
+			"ColorPickerModule": {
+				"$path": "src/Client/Modules/ColorPickerModule.lua"
+			}
+		},
+		"ServerScriptService": {
+			"$className": "ServerScriptService",
+			"Modules": {
+				"$className": "Folder",
+				"Whitelist": {
+					"$path": "src/Server/Modules/Whitelist.lua"
+				},
+				"CharacterData": {
+					"$path": "src/Server/Modules/CharacterData.lua"
+				}
+			},
+
+			"CoreScripts": {
+				"$className": "Folder",
+				"CharacterCustomization": {
+					"$path": "src/Server/CoreScripts/CharacterCustomization.server.lua"
+				}
+			}
+		},
+		"StarterGui": {
+			"$className": "StarterGui",
+			"CharacterHandler": {
+				"$path": "src/Client/CoreScripts/CharacterHandler.client.lua",
+				"$ignoreUnknownInstances": true
+			},
+			"$ignoreUnknownInstances": true
+		},
+		"SoundService": {
+			"$className": "SoundService",
+			"$properties": {
+				"RespectFilteringEnabled": true
+			}
+		},
+		"Workspace": {
+			"$className": "Workspace",
+			"$properties": {
+				"FilteringEnabled": true
+			},
+			"Baseplate": {
+				"$className": "Part",
+				"$properties": {
+					"Position": [
+						0.0,
+						-10.0,
+						0.0
+					],
+					"Color": [
+						0.38823,
+						0.37254,
+						0.38823
+					],
+					"Size": [
+						512.0,
+						20.0,
+						512.0
+					],
+					"Locked": true,
+					"Anchored": true
+				}
+			}
+		}
+	}
+}
