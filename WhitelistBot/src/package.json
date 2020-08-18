@@ -1,0 +1,14 @@
+{
+  "name": "whitelist_bot",
+  "version": "1.0.0",
+  "description": "Discord bot that listens for a GET request from a .server.lua ROBLOX script and fetches data from a Discord server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bloxy": "^5.0.0-alpha4"
+  }
+}
