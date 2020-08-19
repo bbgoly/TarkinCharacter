@@ -4,7 +4,7 @@ local MessagingService = game:GetService("MessagingService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 
-local bersekers, lastUpdate, REQUEST_DELAY = {}, -1, 5 * 60
+local bersekers, lastUpdate, REQUEST_DELAY = {}, -1, 60
 --local dataModule = require(ServerScriptService.Modules.CharacterData)
 local charSelectEvent = ReplicatedStorage.Remotes:WaitForChild("CharacterSelectEvent")
 
@@ -81,6 +81,7 @@ coroutine.wrap(function()
                         pcall(function()
                             MessagingService:PublishAsync("UpdateWhitelistEvent", {game.JobId, bersekers})
                             print("SENDING NEW DATA TO OTHER SERVERS")
+                            lastUpdate = os.time()
                         end)
                     end
                 end
