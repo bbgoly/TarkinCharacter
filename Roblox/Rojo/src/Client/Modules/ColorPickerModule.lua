@@ -1,6 +1,8 @@
 local color = {}
 color.__index = color
 
+-- Add the color gui as a child of the module
+
 function color.DegToRad(n)
     return n * math.pi / 180
 end
