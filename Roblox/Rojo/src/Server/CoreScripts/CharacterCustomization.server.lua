@@ -5,7 +5,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 
 local bersekers, lastUpdate, REQUEST_DELAY = {}, -1, 5 * 60
-local dataModule = require(ServerScriptService.Modules.CharacterData)
+--local dataModule = require(ServerScriptService.Modules.CharacterData)
 local charSelectEvent = ReplicatedStorage.Remotes:WaitForChild("CharacterSelectEvent")
 
 local function SetAllStates(humanoid, walkSpeed, jumpPower, state)
@@ -27,9 +27,11 @@ end
 
 local subSuccess, _ = pcall(function()
     return MessagingService:SubscribeAsync("UpdateWhitelistEvent", function(message)
-        print(message.Data["TriggehTrey"] or message.Data[1], message.Data["TriggehTrey"] or " owo")
-        bersekers = message.Data
-        lastUpdate = os.time()
+        if game.JobId ~= message.Data[1] then
+            print(message.Data[2]["TriggehTrey"], "owo grre Recieved update from another server")
+            bersekers = message.Data[2]
+            lastUpdate = os.time()
+        end
     end)
 end)
 
@@ -56,7 +58,7 @@ coroutine.wrap(function()
                             for _,id in pairs(member.roles) do
                                 if member.nick and tonumber(id) == 745309276616130641 then
                                     updatedBerserkers[member.nick] = GetMemberUserId(member.nick)
-                                    print(member.nick .. (tonumber(id) == 745309276616130641 and " has the berserker role!" or " does not have the berserker role!"))
+                                    print(member.nick .. (tonumber(id) == 745309276616130641 and " has the berserker role!" or " does not have the berserker role!\n\n"))
                                     break
                                 end
                             end
@@ -65,7 +67,7 @@ coroutine.wrap(function()
                         updatedBerserkers = nil
         
                         pcall(function()
-                            MessagingService:PublishAsync("UpdateWhitelistEvent", bersekers)
+                            MessagingService:PublishAsync("UpdateWhitelistEvent", {game.JobId, bersekers})
                         end)
                     end
                 end
@@ -78,7 +80,8 @@ end)()
 
 game.Players.PlayerAdded:Connect(function(plr)
     plr.CharacterAdded:Connect(function(char)
-        local data, humanoid = dataModule.GetData(plr), char:FindFirstChildWhichIsA("Humanoid")
+        -- local data, humanoid = dataModule.GetData(plr), 
+        local humanoid = char:FindFirstChildWhichIsA("Humanoid")
         SetAllStates(humanoid, 0, 0, false)
         charSelectEvent:FireClient(plr, data, bersekers)
     end)
