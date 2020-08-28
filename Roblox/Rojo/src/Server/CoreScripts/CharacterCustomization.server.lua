@@ -4,7 +4,7 @@ local MessagingService = game:GetService("MessagingService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 
-local bersekers, lastUpdate, REQUEST_DELAY = {}, -1, 60
+local bersekers, lastUpdate, REQUEST_DELAY = {}, -1, 5 * 60
 --local dataModule = require(ServerScriptService.Modules.CharacterData)
 local charSelectEvent = ReplicatedStorage.Remotes:WaitForChild("CharacterSelectEvent")
 
@@ -25,19 +25,10 @@ local function GetMemberUserId(nickname)
     return success and result or nil
 end
 
-local function PrintDictionary(dict)
-    for k,v in pairs(dict) do
-        print(k, v)
-    end
-end
-
 local subSuccess, _ = pcall(function()
     return MessagingService:SubscribeAsync("UpdateWhitelistEvent", function(message)
         if game.JobId ~= message.Data[1] then
-            print(message.Data[2]["TriggehTrey"], "owo grre Recieved update from another server")
-            PrintDictionary(bersekers)
             bersekers = message.Data[2]
-            PrintDictionary(bersekers)
             lastUpdate = os.time()
         end
     end)
@@ -47,12 +38,10 @@ coroutine.wrap(function()
     if subSuccess or RunService:IsStudio() then
         while true do
             local delta = os.time() - lastUpdate
-            print(delta)
-            if lastUpdate == -1 or delta > REQUEST_DELAY then
-                delta = REQUEST_DELAY
+            if delta > REQUEST_DELAY then
                 local success, data = pcall(function()
                     return HttpService:RequestAsync({
-                        Url = "https://discord.com/api/v6/guilds/706653106208899132/members?limit=1000",  
+                        Url = "https://discord.com/api/guilds/706653106208899132/members?limit=1000",
                         Method = "GET", 
                         Headers = {
                             ["Content-Type"] = "application/json", 
@@ -68,16 +57,13 @@ coroutine.wrap(function()
                             for _,id in pairs(member.roles) do
                                 if member.nick and tonumber(id) == 745309276616130641 then
                                     updatedBerserkers[member.nick] = GetMemberUserId(member.nick)
-                                    PrintDictionary(bersekers)
                                     print("UPDATED DATA IN THIS SERVER")
                                     break
                                 end
                             end
                         end
                         bersekers = updatedBerserkers
-                        PrintDictionary(bersekers)
-                        updatedBerserkers = nil
-        
+
                         pcall(function()
                             MessagingService:PublishAsync("UpdateWhitelistEvent", {game.JobId, bersekers})
                             print("SENDING NEW DATA TO OTHER SERVERS")
@@ -85,9 +71,9 @@ coroutine.wrap(function()
                         end)
                     end
                 end
+                delta = REQUEST_DELAY
             end
             lastUpdate = os.time()
-            print(delta)
             wait(delta)
         end
     end
