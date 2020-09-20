@@ -9,7 +9,7 @@ local bersekers, lastUpdate, REQUEST_DELAY = {}, -1, 5 * 60
 local charSelectEvent = ReplicatedStorage.Remotes:WaitForChild("CharacterSelectEvent")
 
 local function SetAllStates(humanoid, walkSpeed, jumpPower, state)
-    for _,enum in pairs(Enum.HumanoidStateType:GetEnumItems()) do
+    for _, enum in pairs(Enum.HumanoidStateType:GetEnumItems()) do
         if enum ~= Enum.HumanoidStateType.None then
             humanoid:SetStateEnabled(enum, state)
         end
@@ -42,19 +42,19 @@ coroutine.wrap(function()
                 local success, data = pcall(function()
                     return HttpService:RequestAsync({
                         Url = "https://discord.com/api/guilds/706653106208899132/members?limit=1000",
-                        Method = "GET", 
+                        Method = "GET",
                         Headers = {
-                            ["Content-Type"] = "application/json", 
+                            ["Content-Type"] = "application/json",
                             ["Authorization"] = "Bot NzQ1NTA2MTYyOTIwOTE1MDQ3.XzywuA.aA3VigMbfIbQfrJIjlj8KrFnVJM"
                         }
                     })
                 end)
-        
+
                 if success and data.Success then
                     local members, updatedBerserkers = HttpService:JSONDecode(data.Body), {}
                     if members then
-                        for _,member in pairs(members) do
-                            for _,id in pairs(member.roles) do
+                        for _, member in pairs(members) do
+                            for _, id in pairs(member.roles) do
                                 if member.nick and tonumber(id) == 745309276616130641 then
                                     updatedBerserkers[member.nick] = GetMemberUserId(member.nick)
                                     print("UPDATED DATA IN THIS SERVER")
@@ -64,11 +64,13 @@ coroutine.wrap(function()
                         end
                         bersekers = updatedBerserkers
 
-                        pcall(function()
-                            MessagingService:PublishAsync("UpdateWhitelistEvent", {game.JobId, bersekers})
-                            print("SENDING NEW DATA TO OTHER SERVERS")
-                            lastUpdate = os.time()
-                        end)
+                        pcall(
+                            function()
+                                MessagingService:PublishAsync("UpdateWhitelistEvent", {game.JobId, bersekers})
+                                print("SENDING NEW DATA TO OTHER SERVERS")
+                                lastUpdate = os.time()
+                            end
+                        )
                     end
                 end
                 delta = REQUEST_DELAY
@@ -81,7 +83,7 @@ end)()
 
 game.Players.PlayerAdded:Connect(function(plr)
     plr.CharacterAdded:Connect(function(char)
-        -- local data, humanoid = dataModule.GetData(plr), 
+        local data = dataModule.GetData(plr)
         local humanoid = char:FindFirstChildWhichIsA("Humanoid")
         SetAllStates(humanoid, 0, 0, false)
         charSelectEvent:FireClient(plr, data, bersekers)
