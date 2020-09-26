@@ -56,7 +56,7 @@ coroutine.wrap(function()
                         for _, member in pairs(members) do
                             for _, id in pairs(member.roles) do
                                 if member.nick and tonumber(id) == 745309276616130641 then
-                                    updatedBerserkers[member.nick] = GetMemberUserId(member.nick)
+                                    updatedBerserkers[GetMemberUserId(member.nick)] = 
                                     print("UPDATED DATA IN THIS SERVER")
                                     break
                                 end
@@ -64,13 +64,11 @@ coroutine.wrap(function()
                         end
                         bersekers = updatedBerserkers
 
-                        pcall(
-                            function()
-                                MessagingService:PublishAsync("UpdateWhitelistEvent", {game.JobId, bersekers})
-                                print("SENDING NEW DATA TO OTHER SERVERS")
-                                lastUpdate = os.time()
-                            end
-                        )
+                        pcall(function()
+                            MessagingService:PublishAsync("UpdateWhitelistEvent", {game.JobId, bersekers})
+                            print("SENDING NEW DATA TO OTHER SERVERS")
+                            lastUpdate = os.time()
+                        end)
                     end
                 end
                 delta = REQUEST_DELAY
@@ -86,6 +84,6 @@ game.Players.PlayerAdded:Connect(function(plr)
         local data = dataModule.GetData(plr)
         local humanoid = char:FindFirstChildWhichIsA("Humanoid")
         SetAllStates(humanoid, 0, 0, false)
-        charSelectEvent:FireClient(plr, data, bersekers)
+        charSelectEvent:FireClient(plr, data, bersekers, subSuccess)
     end)
 end)
