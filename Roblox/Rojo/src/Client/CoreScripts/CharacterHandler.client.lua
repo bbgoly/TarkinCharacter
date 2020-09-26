@@ -77,7 +77,7 @@ local function SetupMainMenu(data, isBerserker, isNitro, charGui)
     end
 end
 
-local function CreateCharGui(data, isBerserker, isNitro)
+local function CreateCharGui(data, )
     -- Uncomment before release
     -- local charGui = ReplicatedStorage.CharacterCustomizationGui:Clone()
     local charGui = game.StarterGui:WaitForChild("CharacterCustomizationGui"):Clone()
