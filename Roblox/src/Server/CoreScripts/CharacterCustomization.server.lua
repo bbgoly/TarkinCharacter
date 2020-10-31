@@ -45,7 +45,7 @@ coroutine.wrap(function()
                         Method = "GET",
                         Headers = {
                             ["Content-Type"] = "application/json",
-                            ["Authorization"] = "Bot NzQ1NTA2MTYyOTIwOTE1MDQ3.XzywuA.aA3VigMbfIbQfrJIjlj8KrFnVJM"
+                            ["Authorization"] = "Bot TOKEN_HERE"
                         }
                     })
                 end)
@@ -70,6 +70,8 @@ coroutine.wrap(function()
                             lastUpdate = os.time()
                         end)
                     end
+                else
+                    warn("Failed to retrieve members from guild, are you sure you put in a bot token?")
                 end
                 delta = REQUEST_DELAY
             end
