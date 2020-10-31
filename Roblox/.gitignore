@@ -1,6 +1,14 @@
 # Compiled Lua sources
 luac.out
 
+# Project place file
+/*.rbxl
+/TarkinCharacter.rbxlx
+
+# Roblox Studio lock files
+/*.rbxlx.lock
+/*.rbxl.lock
+
 # luarocks build files
 *.src.rock
 *.zip

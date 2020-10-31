@@ -5,10 +5,10 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 
 local bersekers, lastUpdate, REQUEST_DELAY = {}, -1, 5 * 60
---local dataModule = require(ServerScriptService.Modules.CharacterData)
+local dataModule = require(ServerScriptService.Modules.CharacterData)
 local charSelectEvent = ReplicatedStorage.Remotes:WaitForChild("CharacterSelectEvent")
 
-local function SetAllStates(humanoid, walkSpeed, jumpPower, state)
+local function SetAllStates(humanoid, state, walkSpeed, jumpPower)
     for _, enum in pairs(Enum.HumanoidStateType:GetEnumItems()) do
         if enum ~= Enum.HumanoidStateType.None then
             humanoid:SetStateEnabled(enum, state)
@@ -83,7 +83,7 @@ game.Players.PlayerAdded:Connect(function(plr)
     plr.CharacterAdded:Connect(function(char)
         local data = dataModule.GetData(plr)
         local humanoid = char:FindFirstChildWhichIsA("Humanoid")
-        SetAllStates(humanoid, 0, 0, false)
+        SetAllStates(humanoid, false, 0, 0)
         charSelectEvent:FireClient(plr, data, bersekers, subSuccess)
     end)
 end)

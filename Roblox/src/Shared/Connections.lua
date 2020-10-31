@@ -25,7 +25,6 @@ end
 function connections.Disconnect(id, event)
     if connections[id] and connections[id][event] then
         connections[id][event]:Disconnect()
-        connections[id][event] = nil
     end
 end
 
@@ -34,7 +33,7 @@ function connections.DisconnectAll(id)
         for event, connection in pairs(connections[id]) do
             -- TEST: Do these hold references to the dictionary?
             connection:Disconnect()
-            print(event .. ": " .. tostring(connections[obj][events].Connected))
+            print(event .. ": " .. tostring(connections[event].Connected))
             event = nil
             print(connections[id]["PlayerAdded"])
         end
